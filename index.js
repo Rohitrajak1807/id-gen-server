@@ -1,10 +1,12 @@
 import express from 'express'
 import mariadb from  'mariadb'
 import bodyParser from 'body-parser'
+import cors from 'cors'
 const PORT = 3000
 
 const app = express()
 app.use(bodyParser.json())
+app.use(cors())
 
 const db = await mariadb.createConnection({
     host: 'localhost',
@@ -21,8 +23,9 @@ app.get('/students', async (request, response) => {
 
 app.post('/students', async (request, response) => {
     let studentData = request.body
+    console.log(request.body)
     const res = await db.query({
-        sql: `INSERT INTO id_cards.issued_id_cards VALUES ('${studentData.roll_no}', '${studentData.course}', '${studentData.department}', '${studentData.ins_email}', '${studentData.name}', '${studentData.date_of_birth}', '${studentData.phone}', '${studentData.perma_address}')`
+        sql: `INSERT INTO id_cards.issued_id_cards VALUES ('${studentData.rollNumber}', '${studentData.course}', '${studentData.department}', '${studentData.instituteEmail}', '${studentData.fullName}', '${studentData.dateOfBirth}', '${studentData.phone}', '${studentData.permanentAddress}')`
     })
     response.json(res)
 })
